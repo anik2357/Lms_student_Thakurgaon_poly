@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create account · Lumen</title>
+  <script>document.documentElement.dataset.theme = localStorage.getItem("lms_theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <main class="auth-wrap">
+    <div class="auth-card">
+      <a class="brand" href="/"><span class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span> Lumen</a>
+      <div class="card">
+        <div id="done" hidden>
+          <h1>Almost there</h1>
+          <div class="note ok" style="margin:16px 0" id="done-msg"></div>
+          <a class="btn block" href="/login.html">Back to sign in</a>
+        </div>
+
+        <div id="formbox">
+          <h1>Create your account</h1>
+          <p class="muted">It takes less than a minute.</p>
+          <form id="form" class="form" novalidate>
+            <div class="field"><label for="name">Full name</label><input id="name" autocomplete="name" required minlength="2" maxlength="120"></div>
+            <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="new-password" required minlength="6"><small class="hint">At least 6 characters</small></div>
+            <div class="field">
+              <label id="role-label">I am a…</label>
+              <div class="role-pick" role="radiogroup" aria-labelledby="role-label">
+                <label><input type="radio" name="role" value="student" checked>Student<small>Join courses and learn</small></label>
+                <label><input type="radio" name="role" value="teacher">Teacher<small>Needs admin approval</small></label>
+              </div>
+            </div>
+            <div id="error" class="form-error" role="alert" hidden></div>
+            <button id="submit" class="btn primary block" type="submit">Create account</button>
+          </form>
+          <p class="muted small" style="margin:18px 0 0">Already registered? <a href="/login.html">Sign in</a></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { api } from "/js/api.js";
+    import { saveSession, homeFor } from "/js/auth.js";
+
+    const $ = (id) => document.getElementById(id);
+
+    $("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = $("submit");
+      const err = $("error");
+      err.hidden = true;
+
+      const name = $("name").value.trim();
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      const role = document.querySelector('input[name="role"]:checked').value;
+
+      if (name.length < 2) return show("Please enter your full name.");
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return show("Please enter a valid email address.");
+      if (password.length < 6) return show("Your password must be at least 6 characters.");
+
+      btn.disabled = true;
+      btn.classList.add("loading");
+      try {
+        const res = await api("/auth/register", { method: "POST", body: { name, email, password, role } });
+        if (res.pending_approval) {
+          $("formbox").hidden = true;
+          $("done-msg").textContent = res.message;
+          $("done").hidden = false;
+        } else {
+          saveSession(res);
+          location.href = homeFor(res.user.role);
+        }
+      } catch (e2) {
+        show(e2.message);
+        btn.disabled = false;
+        btn.classList.remove("loading");
+      }
+
+      function show(msg) {
+        err.textContent = msg;
+        err.hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

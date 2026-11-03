@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.pytest_cache/
+backend/lms.db
+backend/uploads/
+node_modules/
+.DS_Store

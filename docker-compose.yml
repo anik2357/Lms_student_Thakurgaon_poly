@@ -1,0 +1,38 @@
+# Runs PostgreSQL 16 and the LMS together:   docker compose up --build
+# Then open http://localhost:8000   (demo accounts are created on first start).
+# For real use: change the passwords and secret below and set LMS_AUTO_SEED to "0".
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lms
+      POSTGRES_USER: lms
+      POSTGRES_PASSWORD: lms-db-password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lms -d lms"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      LMS_SECRET_KEY: change-this-to-a-long-random-string
+      LMS_AUTO_SEED: "1"
+      DATABASE_URL: postgresql://lms:lms-db-password@db:5432/lms
+      LMS_UPLOAD_DIR: /data/uploads
+    volumes:
+      - uploads:/data/uploads
+
+volumes:
+  db-data:
+  uploads:

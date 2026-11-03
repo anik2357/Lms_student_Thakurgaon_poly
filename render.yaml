@@ -1,0 +1,42 @@
+# Render Blueprint: one web service (this app, built from the Dockerfile) + one PostgreSQL database.
+# Deploy: push this project to GitHub/GitLab, then in Render choose  New > Blueprint  and pick the repo.
+# The Dockerfile and render.yaml must sit at the ROOT of the repository.
+services:
+  - type: web
+    name: lumen-lms
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    plan: free                      # free instances sleep after ~15 min idle and lose uploaded files; see README
+    healthCheckPath: /api/v1/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL           # the database's internal connection string, filled in by Render
+        fromDatabase:
+          name: lumen-db
+          property: connectionString
+      - key: LMS_SECRET_KEY         # signs login tokens; generated once by Render
+        generateValue: true
+      - key: LMS_AUTO_SEED          # 1 = create demo accounts and courses on an empty database
+        value: "0"
+      - key: LMS_ADMIN_EMAIL        # Render asks for these two when the Blueprint is first created
+        sync: false
+      - key: LMS_ADMIN_PASSWORD
+        sync: false
+      - key: LMS_ADMIN_NAME
+        value: Administrator
+      - key: LMS_UPLOAD_DIR
+        value: /data/uploads
+    # Paid plans only: keep uploaded lesson files and submissions across deploys and restarts.
+    # Change `plan: free` above to a paid plan, then uncomment:
+    # disk:
+    #   name: lms-uploads
+    #   mountPath: /data
+    #   sizeGB: 1
+
+databases:
+  - name: lumen-db
+    databaseName: lms
+    user: lms
+    plan: free
+    region: oregon                  # keep the same region for the web service (default: oregon)

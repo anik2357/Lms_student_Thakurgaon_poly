@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lumen · Learning management for schools</title>
+  <meta name="description" content="Lumen is a learning management system with courses, assignments, quizzes and grading for students, teachers and administrators.">
+  <script>document.documentElement.dataset.theme = localStorage.getItem("lms_theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="public-nav" aria-label="Main">
+    <a class="brand" href="/"><span class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></span> Lumen</a>
+    <a class="btn ghost" href="/login.html">Sign in</a>
+    <a class="btn primary" href="/register.html">Get started</a>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1>One calm place for <em>teaching</em> and learning.</h1>
+      <p class="lead">Courses, lessons, assignments, quizzes and grades, with a clear view for every student, teacher and administrator.</p>
+      <div class="row">
+        <a class="btn primary" href="/register.html">Create an account</a>
+        <a class="btn" href="/login.html">I already have one</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="card"><strong>Introduction to Python</strong><div class="progress-row" style="margin-top:10px"><div class="progress"><span style="width:62%"></span></div><span class="progress-label">62%</span></div></div>
+      <div class="card"><strong>Assignment graded</strong><p class="muted" style="margin:6px 0 0">Temperature converter · <b style="color:var(--ok)">88 / 100</b></p></div>
+      <div class="card"><strong>Quiz result</strong><p class="muted" style="margin:6px 0 0">3 of 3 correct</p></div>
+    </div>
+  </header>
+
+  <section class="features" aria-labelledby="who">
+    <h2 id="who">Built for everyone in the classroom</h2>
+    <div class="grid three">
+      <div class="card feature">
+        <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <h3>Students</h3>
+        <p>Pick up where you left off.</p>
+        <ul><li>Browse and enrol in courses</li><li>Watch lessons, download materials</li><li>Submit work, take quizzes, see grades</li></ul>
+      </div>
+      <div class="card feature">
+        <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div>
+        <h3>Teachers</h3>
+        <p>Spend time teaching, not clicking.</p>
+        <ul><li>Build courses with lessons and files</li><li>Create assignments and auto-graded quizzes</li><li>Grade with feedback, post announcements</li></ul>
+      </div>
+      <div class="card feature">
+        <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Administrators</h3>
+        <p>Stay in control of the whole platform.</p>
+        <ul><li>Manage users and roles</li><li>Review and approve courses</li><li>Platform stats and an audit trail</li></ul>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
